@@ -1,11 +1,11 @@
-const { default:mongoose } = require("mongoose");
+const { default: mongoose } = require("mongoose");
 
 const userSchema = mongoose.Schema({
-    name:{
+    name: {
         type: String,
         maxLength: 50
     },
-    emial:{
+    email: {
         type: String,
         trim: true,
         unique: true
@@ -18,5 +18,10 @@ const userSchema = mongoose.Schema({
         type: Number,
         default: 0,
     },
-    image: String
+    image: String,
+   
 })
+
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;
