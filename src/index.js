@@ -3,6 +3,19 @@ const path = require('path');
 const app = express();
 const cors = require('cors');
 const port = 4000;
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+
+mongoose.connect(process.env.MONGO_URI)
+    .then(()=>{
+        console.log('연결 완료');
+    }) 
+    .catch(err =>{
+        console.error(err);
+    })
 
 
 app.use(cors());
