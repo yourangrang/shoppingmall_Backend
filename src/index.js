@@ -28,6 +28,8 @@ app.post('/', (req, res) => {
     res.json(req.body);
 })
 
+app.use('/users', require('./routes/users'));
+
 
 //오류 처리기
 app.use((err, req, res, next) => {
