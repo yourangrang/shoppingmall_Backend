@@ -26,6 +26,14 @@ const productSchema = mongoose.Schema({
         type: Number,
         default: 1
     },
+    size: {
+        type: Number,
+        default: 1
+    },
+    clothing: {
+        type: Number,
+        default: 1
+    },
     views: {
         type: Number,
         default: 0
