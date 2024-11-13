@@ -25,6 +25,24 @@ router.post('/image', auth, async (req, res, next) => {
     })
 }) //파일업로드
 
+
+router.get('/:id', async (req, res, next) => {
+    const type = req.query.type;
+    let productIds = req.params.id;
+
+    try {
+        const product = await Product
+            .find({ _id: { $in: productIds} })
+            .populate('writer');
+
+        return res.status(200).send(product);
+        
+    } catch (error) {
+        next(error);
+    }
+}) //상품디테일 페이지
+
+
 router.get('/', async (req, res, next) => {
     const order = req.query.order ? req.query.order : 'desc';
     const sortBy = req.query.sortBy ? req.query.sortBy : '_id';
