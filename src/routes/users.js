@@ -16,7 +16,7 @@ router.get('/auth', auth, async (req, res, next) => {
         cart: req.user.cart,
         history: req.user.history
     })
-})
+}) //인증
 
 
 router.post('/register', async (req, res, next) =>{
@@ -27,7 +27,7 @@ router.post('/register', async (req, res, next) =>{
     } catch (error) {
         next(error)
     }
-})
+}) // 회원가입
 
 router.post('/login', async (req, res, next) =>{
     try {
@@ -56,7 +56,7 @@ router.post('/login', async (req, res, next) =>{
     } catch (error) {
         next(error)
     }
-})
+}) // 로그인
 
 
 router.post('/logout', auth, async (req, res, next) =>{
@@ -65,6 +65,57 @@ router.post('/logout', auth, async (req, res, next) =>{
     } catch (error) {
         next(error)
     }
-})
+}) // 로그아웃
+
+
+router.post('/cart', auth, async (req, res, next) => {
+    try {
+
+        const { productId, size } = req.body;  // productId와 size를 요청 본문에서 받음11.13
+        
+        // User Collection에 해당 유저의 정보 가져오기
+        const userInfo = await User.findOne({ _id: req.user._id})
+
+        // 가져온 정보중 카트에 넣으려하는 정보와 같은게 있는지 확인
+        let duplicate = false;
+        userInfo.cart.forEach((item) => {
+            if(item.id === req.body.productId && item.size === size) { //11.13
+                duplicate = true;
+            }
+        })
+
+        // 같은 상품이 이미 있을 때
+        if (duplicate) {
+            const user = await User.findOneAndUpdate(
+                { _id: req.user._id, "cart.id": req.body.productId, "cart.size": size  },// 찾아서
+                { $inc: {"cart.$.quantity": 1 } }, // 수정하고
+                { new: true } //수정한걸로 업데이트하라
+            )
+
+            return res.status(201).send(user.cart);
+        }
+        // 같은상품이 있지 않을 때
+        else {
+            const user = await User.findOneAndUpdate(
+                { _id: req.user._id},
+                {
+                    $push: {
+                        cart: {
+                            id: req.body.productId,
+                            size: size,       // 선택된 사이즈11.13
+                            quantity: 1,
+                            date: Date.now()
+                        }
+                    }
+                },
+                { new: true}
+            )
+                return res.status(201).send(user.cart);
+        }
+
+    } catch (error) {
+        next(error);
+    }
+}) // 카트
 
 module.exports = router
