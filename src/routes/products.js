@@ -30,6 +30,16 @@ router.get('/:id', async (req, res, next) => {
     const type = req.query.type;
     let productIds = req.params.id;
 
+
+    if(type === 'array') {
+        //id = 123456789,123456789,123456789
+        //productIds = ['123456789', '123456789', '123456789',]
+        let ids = productIds.split(',');
+        productIds = ids.map(item => {
+            return item
+        })
+    }
+
     try {
         const product = await Product
             .find({ _id: { $in: productIds} })
