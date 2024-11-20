@@ -8,7 +8,7 @@ const paymentSchema = mongoose.Schema({
         type: Array,
         default: []
     },
-    prodeuct: {
+    product: {
         type: Array,
         default: []
     },
