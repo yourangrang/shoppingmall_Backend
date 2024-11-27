@@ -168,7 +168,8 @@ router.post('/payment', auth, async (req, res) => {
             id: item._id,
             price: item.price,
             quantity: item.quantity,
-            paymentId: crypto.randomUUID()
+            paymentId: crypto.randomUUID(),
+            images: item.images
         })
     })
 
