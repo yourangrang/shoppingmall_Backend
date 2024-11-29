@@ -41,6 +41,20 @@ app.use((err, req, res, next) => {
 
 app.use(express.static(path.join(__dirname, '../uploads')));
 
+
+// Serve static assets if in production
+if (process.env.NODE_ENV === "production") {
+
+    // Set static folder
+    // All the javscript and css files will be read and backend from thif folder
+    app.use(express.static("frontend/dist"));
+  
+    // index.html for all page routes
+    app.get("*", (req, res) => {
+      res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
+    });
+  }
+
 app.listen(port, () => {
     console.log(`${port}번에서 실행이 되었습니다.`);
 });
